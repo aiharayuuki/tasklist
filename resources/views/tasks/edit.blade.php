@@ -16,7 +16,7 @@
       <label for="content" class="label">
         <span class="label-text">メッセージ:</span>
       </label>
-      <input type="text" name="content" value="{{ $message->content }}" class="input input-bordered w-full">
+      <input type="text" name="content" value="{{ $task->content }}" class="input input-bordered w-full">
     </div>
 
     <button type="submit" class="btn btn-primary btn-outline">更新</button>
