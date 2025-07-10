@@ -18,6 +18,11 @@
       <input type="text" name="content" class="input input-bordered w-full">
     </div>
 
+    <div>
+      <label>Status</label>
+      <input type="text" name="status" value="{{ old('status') }}"> <!-- ← 追記 -->
+    </div>
+
     <button type="submit" class="btn btn-primary btn-outline">投稿</button>
   </form>
 </div>

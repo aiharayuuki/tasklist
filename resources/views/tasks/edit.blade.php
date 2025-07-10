@@ -19,6 +19,11 @@
       <input type="text" name="content" value="{{ $task->content }}" class="input input-bordered w-full">
     </div>
 
+        <div>
+            <label>Status</label>
+            <input type="text" name="status" value="{{ old('status', $task->status) }}"> <!-- ← 追記 -->
+        </div>
+
     <button type="submit" class="btn btn-primary btn-outline">更新</button>
   </form>
 </div>
