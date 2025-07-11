@@ -50,6 +50,7 @@ class TasksController extends Controller
         // メッセージを作成
         $task = new Task;
         $task->content = $request->content;
+        $task->status = $request->status;   // ← ここを追加
         $task->save();
 
         // トップページへリダイレクトさせる
