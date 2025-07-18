@@ -2,6 +2,13 @@
 
 @section('content')
 
+
+    {{-- 新規作成リンク（ログインユーザーのみ） --}}
+    @auth
+        <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-4">新規作成</a>
+    @endauth
+
+
 <!-- ここにページ毎のコンテンツを書く -->
 <div class="prose ml-4">
     <h2 class="text-lg">タスク 一覧</h2>
