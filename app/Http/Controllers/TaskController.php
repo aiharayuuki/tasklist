@@ -3,25 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        // ログインユーザーのタスクのみ取得
-        $tasks = Task::where('user_id', auth()->id())->get();
+        // 最新の自分のタスクを取得
+        $tasks = Auth::user()->tasks()->latest()->get();
 
-        // 一覧表示ビューへ渡す
         return view('tasks.index', compact('tasks'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $task = new Task;
@@ -31,9 +30,6 @@ class TaskController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -44,21 +40,18 @@ class TaskController extends Controller
         $task = new Task;
         $task->content = $request->content;
         $task->status = $request->status;
-        $task->user_id = auth()->id(); // ログインユーザーのIDを保存
+        $task->user_id = auth()->id();
         $task->save();
 
-        return redirect()->route('tasks.index'); // 👈 ここ変更
+        return redirect()->route('tasks.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $task = Task::findOrFail($id);
 
         if ($task->user_id !== auth()->id()) {
-    return redirect()->route('tasks.index');
+            abort(403);
         }
 
         return view('tasks.show', [
@@ -66,15 +59,12 @@ class TaskController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $task = Task::findOrFail($id);
 
         if ($task->user_id !== auth()->id()) {
-    return redirect()->route('tasks.index');
+            abort(403);
         }
 
         return view('tasks.edit', [
@@ -82,15 +72,12 @@ class TaskController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $task = Task::findOrFail($id);
 
         if ($task->user_id !== auth()->id()) {
-    return redirect()->route('tasks.index');
+            abort(403);
         }
 
         $request->validate([
@@ -105,19 +92,16 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $task = Task::findOrFail($id);
 
         if ($task->user_id !== auth()->id()) {
-    return redirect()->route('tasks.index');
+            abort(403);
         }
 
         $task->delete();
 
-    return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index');
     }
 }
